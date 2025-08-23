@@ -146,35 +146,51 @@ def main():
     """Main function to run the scraper."""
     try:
         courses = get_course_data()
-        print("MIT OCW Prerequisite Scraper")
-        print("=" * 40)
-        print("\nAvailable courses:")
-        
-        for course in courses:
-            print(f"{course['id']:2d}. {course['title']}")
-        
-        choice = input(f"\nEnter the course number you want to scrape (1-{len(courses)}): ").strip()
-        if not choice.isdigit():
-            print("Please enter a valid number.")
-            return
-        
-        choice = int(choice)
-        selected = next((c for c in courses if c["id"] == choice), None)
-        if not selected:
-            print("Invalid course number.")
-            return
-        
-        print(f"\nScraping prerequisites for: {selected['title']}")
+        print("Curriculum Compass - MIT OCW Prerequisite Scraper")
         print("=" * 50)
         
-        prereq_text = scrape_prerequisites(selected["url"])
-        print(f"Raw prerequisite text: {prereq_text[:200]}...")
-        
-        parsed = extract_prereqs(selected["title"], prereq_text)
-        
-        print("\n" + "=" * 50)
-        print("RESULT:")
-        print(json.dumps(parsed, indent=4))
+        while True:
+            print("\nAvailable courses:")
+            for course in courses:
+                print(f"{course['id']:2d}. {course['title']}")
+            
+            choice = input(f"\nEnter the course number you want to scrape (1-{len(courses)}) or type 'exit' to quit: ").strip()
+            
+            if choice.lower() == "exit":
+                print("Exiting program.")
+                break
+                
+            if not choice.isdigit():
+                print("Please enter a valid number or 'exit'.")
+                continue
+            
+            choice = int(choice)
+            selected = next((c for c in courses if c["id"] == choice), None)
+            if not selected:
+                print("Invalid course number.")
+                continue
+            
+            print(f"\nScraping prerequisites for: {selected['title']}")
+            print("=" * 50)
+            
+            try:
+                prereq_text = scrape_prerequisites(selected["url"])
+                print(f"Raw prerequisite text: {prereq_text[:200]}...")
+                
+                parsed = extract_prereqs(selected["title"], prereq_text)
+                
+                print("\n" + "=" * 50)
+                print("RESULT:")
+                print(json.dumps(parsed, indent=4))
+                
+            except Exception as e:
+                print(f"Error scraping course: {e}")
+            
+            # Ask if they want to try another course
+            again = input("\nDo you want to try another course? (y/n): ").strip().lower()
+            if again != "y":
+                print("Exiting program.")
+                break
         
     except Exception as e:
         print(f"Error: {e}")
