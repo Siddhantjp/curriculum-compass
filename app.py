@@ -15,13 +15,20 @@ st.set_page_config(page_title="Curriculum Compass", page_icon="🎓", layout="wi
 st.title("Curriculum Compass")
 st.caption("MIT OCW prerequisite extractor with AI-powered parsing")
 
-# Environment check
-api_key = os.getenv("GROQ_API_KEY")
-if not api_key:
-    st.warning(
-        "GROQ_API_KEY not found in your environment. The AI parsing step requires a valid Groq API key.\n"
-        "Add a .env file with GROQ_API_KEY or set it in your environment variables."
+# Get API key from Streamlit secrets
+try:
+    groq_api_key = st.secrets["api_keys"]["groq"]
+    os.environ["GROQ_API_KEY"] = groq_api_key
+except:
+    st.error(
+        "⚠️ Groq API key not found in Streamlit secrets!\n\n"
+        "**For Local Development:**\n"
+        "1. Create a `.streamlit/secrets.toml` file\n"
+        "2. Add: `[api_keys]\ngroq = 'your_api_key_here'`\n\n"
+        "**For Streamlit Cloud:**\n"
+        "Add the secret in your app's settings"
     )
+    st.stop()
 
 # Sidebar controls
 st.sidebar.header("Course Selection")
