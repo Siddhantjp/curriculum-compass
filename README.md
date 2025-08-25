@@ -15,7 +15,10 @@ An intelligent web scraper that extracts course prerequisites from MIT OpenCours
 
 ### Prerequisites
 - Python 3.8 or higher
-- Groq API key 
+- Groq API key (provided below for judges)
+
+### For Hackathon Judges
+For immediate testing, you can use the provided API key. Please contact the team for access or set up your own free API key from [https://console.groq.com/](https://console.groq.com/). 
 
 ### Installation
 
@@ -190,9 +193,6 @@ Contributions are welcome! Areas for improvement:
 - Support for other universities
 - Web interface development
 
-## License
-
-This project is open source and available under the MIT License.
 
 ## Support
 
@@ -204,4 +204,3 @@ If you encounter issues:
 
 ---
 
-*Built for the MIT academic community and beyond.*
